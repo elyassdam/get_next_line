@@ -18,10 +18,10 @@ int main(void)
     }
 
     char *line;
-    while ((line = get_next_line(fd)) != NULL) // Leer línea por línea
+    while ((line = get_next_line(fd)) != NULL)
     {
-        printf("%s", line); // Imprimir la línea leída
-        free(line);         // Liberar memoria para la siguiente línea
+        printf("%s", line); 
+        free(line);
     }
 
     close(fd); // Cerrar el archivo
@@ -31,40 +31,30 @@ int main(void)
 char	*get_next_line(int fd)
 {
 	static char	breader[BUFFER_SIZE + 1];
-	ssize_t		read_bytes = 1;  
+	ssize_t		read_bytes;
 	char		*btemp;
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-
+	read_bytes = 1;
 	while (!ft_strchr(breader, '\n') && read_bytes > 0)
 	{
 		btemp = (char *)malloc(BUFFER_SIZE + 1);
 		if (!btemp)
 			return (NULL);
-
 		read_bytes = read(fd, btemp, BUFFER_SIZE);
 		if (read_bytes < 0)
-		{
-			free(btemp);
-			return (NULL);
-		}
+			return free(btemp), (NULL);
 		btemp[read_bytes] = '\0';
-
 		char *temp = ft_strjoin(breader, btemp);
 		if (!temp)
-		{
-			free(btemp);
-			return (NULL);
-		}
+			return free(btemp),(NULL);
 		ft_strncpy(breader, temp, ft_strlen(temp) + 1);
 		free(temp);
 		free(btemp);
 	}
-
-	line = extractor(breader);
-	return (line);
+	return line = extractor(breader), (line);
 }
 
 char	*extractor(char *breader)
@@ -75,18 +65,14 @@ char	*extractor(char *breader)
 
 	if (!breader || !*breader)
 		return (NULL);
-    
 	start = breader;
 	next = breader;
 	while (*next != '\0' && *next != '\n')
 		next++;
-
 	line = (char *)ft_calloc((next - start + 2), sizeof(char));
 	if (!line)
 		return (NULL);
-
 	ft_strncpy(line, start, (next - start + 1));
-
 	if (*next == '\n')
 	{
 		next++;
@@ -94,7 +80,6 @@ char	*extractor(char *breader)
 	}
 	else
 		breader[0] = '\0';  // ✅ Se asegura de vaciar el buffer al final del archivo
-
 	return (line);
 }
 
