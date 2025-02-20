@@ -7,6 +7,7 @@
 #define BUFFER_SIZE 42
 char	*extractor(char *breader);
 char	*get_next_line(int fd);
+void	*ft_free(char *temp, char *btemp);
 
 int main(void)
 {
@@ -34,6 +35,7 @@ char	*get_next_line(int fd)
 	ssize_t		read_bytes;
 	char		*btemp;
 	char		*line;
+	char		*temp;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -45,18 +47,22 @@ char	*get_next_line(int fd)
 			return (NULL);
 		read_bytes = read(fd, btemp, BUFFER_SIZE);
 		if (read_bytes < 0)
-			return free(btemp), (NULL);
+			return (free(btemp), NULL);
 		btemp[read_bytes] = '\0';
-		char *temp = ft_strjoin(breader, btemp);
+		temp = ft_strjoin(breader, btemp);
 		if (!temp)
-			return free(btemp),(NULL);
+			return (free(btemp),NULL);
 		ft_strncpy(breader, temp, ft_strlen(temp) + 1);
-		free(temp);
-		free(btemp);
+		ft_free(temp,btemp);
 	}
-	return line = extractor(breader), (line);
+	return (line = extractor(breader), line);
 }
 
+void	*ft_free(char *temp, char *btemp)
+{
+	free(temp);
+	free(btemp);
+}
 char	*extractor(char *breader)
 {
 	char	*start;
