@@ -6,20 +6,21 @@
 /*   By: yael-you <yael-you@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 17:04:24 by yael-you          #+#    #+#             */
-/*   Updated: 2025/02/20 01:40:56 by yael-you         ###   ########.fr       */
+/*   Updated: 2025/02/26 23:26:29 by yael-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
-
+#include "get_next_line.h"
 
 char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char const *s1, char const *s2);
-void	*ft_calloc(size_t nmemb, size_t size);
+// void	*ft_calloc(size_t nmemb, size_t size);
 char	*ft_strncpy(char *dest, char *src, unsigned int n);
 size_t	ft_strlen(const char *s);
+char	*ft_strdup(const char *s);
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -34,7 +35,7 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-void	*ft_calloc(size_t nmemb, size_t size)
+/* void	*ft_calloc(size_t nmemb, size_t size)
 {
 	size_t	res ;
 	void	*ptr;
@@ -50,7 +51,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	while (res--)
 		*str++ = 0;
 	return (ptr);
-}
+} */
 
 char	*ft_strncpy(char *dest, char *src, unsigned int n)
 {
@@ -89,4 +90,23 @@ size_t	ft_strlen(const char *s)
 	while (s[size])
 		size++;
 	return (size);
+}
+
+char	*ft_strdup(const char *s)
+{
+	size_t	sizem;
+	char	*c;
+
+	sizem = ft_strlen(s);
+	c = (char *)malloc(sizem + 1);
+	if (!c)
+		return (NULL);
+	while (*s)
+	{
+		*c = *s;
+		s++;
+		c++;
+	}
+	*c = '\0';
+	return (c - sizem);
 }

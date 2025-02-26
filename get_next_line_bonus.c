@@ -1,21 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yael-you <yael-you@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/19 16:57:23 by yael-you          #+#    #+#             */
-/*   Updated: 2025/02/26 23:25:28 by yael-you         ###   ########.fr       */
+/*   Created: 2025/02/20 13:16:37 by yael-you          #+#    #+#             */
+/*   Updated: 2025/02/20 13:21:16 by yael-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
+char    get_next_line_bonus(char def)
+{
+    
 
-size_t	ft_strlen(const char *s);
-char	*get_next_line(int fd);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin(char const *s1, char const *s2);
-// void	*ft_calloc(size_t nmemb, size_t size);
-char	*ft_strncpy(char *dest, char *src, unsigned int n);
-char	*ft_strdup(const char *s);
+    
+}
