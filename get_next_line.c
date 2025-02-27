@@ -6,7 +6,7 @@
 /*   By: yael-you <yael-you@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 17:04:24 by yael-you          #+#    #+#             */
-/*   Updated: 2025/02/26 23:28:43 by yael-you         ###   ########.fr       */
+/*   Updated: 2025/02/27 02:06:50 by yael-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,41 +160,41 @@ char	*get_next_line(int fd)
 
 char	*extractor(char *breader)
 {
-	size_t	len = 0;
+	char	*ptr;
 	char	*line;
 
 	if (!breader || !*breader)
 		return (NULL);
-	while (breader[len] && breader[len] != '\n')
-		len++;
-	line = (char *)malloc(len + (breader[len] == '\n') + 1 * sizeof(char));
+	ptr = breader;
+	while (*ptr && *ptr != '\n')
+		ptr++;
+	line = (char *)malloc((ptr - breader) + (*ptr == '\n') + 1);
 	if (!line)
 		return (NULL);
-	ft_strncpy(line, breader, len + (breader[len] == '\n'));
+	ft_strncpy(line, breader, (ptr - breader) + (*ptr == '\n'));
 	return (line);
 }
+
+char	*extractor_restante(char *breader)
+{
+	char	*ptr;
+	char	*resto;
+
+	if (!breader || !*breader)
+		return (NULL);
+	ptr = breader;
+	while (*ptr && *ptr != '\n')
+		ptr++;
+	if (*ptr == '\n')
+		ptr++;
+	if (!*ptr)
+		return (NULL);
+	resto = ft_strdup(ptr);
+	return (resto);
+}
+
 void	*ft_free(char *temp, char *btemp)
 {
 	free(temp);
 	free(btemp);
 } 
-char	*extractor_restante(char *breader)
-{
-	char	*resto;
-	size_t	start = 0;
-
-	if (!breader || !*breader)
-		return (NULL);
-
-	while (breader[start] && breader[start] != '\n')
-		start++;
-
-	if (breader[start] == '\n')
-		start++;
-
-	if (!breader[start])
-		return (NULL);
-
-	resto = ft_strdup(breader + start);
-	return (resto);
-}
