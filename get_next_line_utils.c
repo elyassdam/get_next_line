@@ -6,7 +6,7 @@
 /*   By: yael-you <yael-you@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 17:04:24 by yael-you          #+#    #+#             */
-/*   Updated: 2025/02/26 23:26:29 by yael-you         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:45:50 by yael-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ char	*ft_strdup(const char *s);
 
 char	*ft_strchr(const char *s, int c)
 {
+	if (!s)
+		return NULL;
 	while (*s)
 	{
 		if (*s == (unsigned char)c)
@@ -45,12 +47,7 @@ char	*ft_strchr(const char *s, int c)
 	if ((nmemb != 0) && (res / nmemb != size))
 		return (NULL);
 	ptr = (char *)malloc(res);
-	if (!ptr)
-		return (NULL);
-	str = (char *)ptr;
-	while (res--)
-		*str++ = 0;
-	return (ptr);
+	if (!ptr)4_LEAKS.KO
 } */
 
 char	*ft_strncpy(char *dest, char *src, unsigned int n)
@@ -77,9 +74,9 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (!s3)
 		return (NULL);
 	s3_start = s3;
-	while (*s1)
+	while (s1 && *s1)
 		*s3++ = *s1++;
-	while (*s2)
+	while (s2 && *s2)
 		*s3++ = *s2++;
 	*s3 = '\0';
 	return (s3_start);
@@ -87,6 +84,9 @@ char	*ft_strjoin(char const *s1, char const *s2)
 size_t	ft_strlen(const char *s)
 {
 	size_t	size = 0;
+
+	if(s == NULL)
+		return 0;
 	while (s[size])
 		size++;
 	return (size);

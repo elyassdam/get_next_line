@@ -6,7 +6,7 @@
 /*   By: yael-you <yael-you@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 17:04:24 by yael-you          #+#    #+#             */
-/*   Updated: 2025/02/27 02:06:50 by yael-you         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:27:47 by yael-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include "get_next_line.h"
-#define BUFFER_SIZE 42
+#include <string.h>
+
 /* char	*ft_strchr(const char *s, int c)
 {
 	while (*s)
@@ -47,42 +48,61 @@ void	*ft_calloc(size_t nmemb, size_t size)
 		*str++ = 0;
 	return (ptr);
 }
-
-char	*ft_strncpy(char *dest, char *src, unsigned int n)
-{
-	unsigned int	i = 0;
-
-	while (src[i] != '\0' && i < n)
-	{
-		dest[i] = src[i];
+f (!breader)	dest[i] = src[i];
 		i++;
 	}
 	dest[i] = '\0';
 	return (dest);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
+} int main(void)
 {
-	char	*s3;
-	char	*s3_start;
-	size_t	len1 = ft_strlen(s1);
-	size_t	len2 = ft_strlen(s2);
+	int fd = open("test.txt", O_RDONLY);
+	if (fd == -1)
+	{
+		perror("Error al abrir el archivo");
+		return (1);
+	}
 
+	char *line;
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("%s", line); 
+		free(line);
+	}
+
+	close(fd); // Cerrar el archivo
+	return (0);
+}  
+f (!breader)
 	s3 = (char *)malloc(len1 + len2 + 1);
 	if (!s3)
 		return (NULL);
-	s3_start = s3;
+	s3_start = s3;ññ
 	while (*s1)
 		*s3++ = *s1++;
 	while (*s2)
-		*s3++ = *s2++;
-	*s3 = '\0';
-	return (s3_start);
-}
+		*s3++ = *s2++;ññ
 size_t	ft_strlen(const char *s)
 {
 	size_t	size = 0;
-	while (s[size])
+	while (s[size]) int main(void)
+{
+	int fd = open("test.txt", O_RDONLY);
+	if (fd == -1)
+	{
+		perror("Error al abrir el archivo");
+		return (1);
+	}
+
+	char *line;
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("%s", line); 
+		free(line);
+	}
+
+	close(fd); // Cerrar el archivo
+	return (0);
+}  
 		size++;
 	return (size);
 }
@@ -103,49 +123,32 @@ char	*ft_strdup(const char *s)
 		c++;
 	}
 	*c = '\0';
-	return (c - sizem);
+	return (c - sizem);ññ
 } */
 char	*extractor(char *breader);
 char	*get_next_line(int fd);
-void	*ft_free(char *temp, char *btemp);
+void	ft_free(char *temp, char *btemp);
 char	*extractor_restante(char *breader);
 
-int main(void)
-{
-    int fd = open("test.txt", O_RDONLY);
-    if (fd == -1)
-    {
-        perror("Error al abrir el archivo");
-        return (1);
-    }
 
-    char *line;
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        printf("%s", line); 
-        free(line);
-    }
-
-    close(fd); // Cerrar el archivo
-    return (0);
-} 
 char	*get_next_line(int fd)
 {
 	static char	*breader;
 	ssize_t		read_bytes;
 	char		*line;
-	char		*temp;
+	char		temp[BUFFER_SIZE + 1];
 	char 		*bcopy;
 
-	if (!breader)
-		breader = ft_strdup("");
+	 if (!breader)
+		breader = ft_strdup(""); 
+	if (breader == NULL || fd < 0)
+		return NULL;
 	read_bytes = 1;
-	temp = (char *)malloc(BUFFER_SIZE + 1);
 	while (!ft_strchr(breader,'\n') && read_bytes > 0 )
 	{
 		read_bytes = read(fd, temp, BUFFER_SIZE);
-		if (read_bytes < 0 || !temp )
-			return (ft_free(breader,temp),NULL);
+		if (read_bytes < 0)
+			return (NULL);
 		temp[read_bytes] = '\0';
 		bcopy = ft_strjoin(breader,temp);
 		free(breader);
@@ -155,7 +158,7 @@ char	*get_next_line(int fd)
 	bcopy = extractor_restante(breader);
 	free(breader);
 	breader = bcopy;
-	return (free(temp),line);
+	return (line);
 }
 
 char	*extractor(char *breader)
@@ -193,8 +196,20 @@ char	*extractor_restante(char *breader)
 	return (resto);
 }
 
-void	*ft_free(char *temp, char *btemp)
+
+int main(void)
 {
-	free(temp);
-	free(btemp);
-} 
+	int fd = open("test.txt", O_RDONLY);
+	char *line;
+	// free(get_next_line(fd));
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		// printf("No deberia\n");
+		printf("%s", line); 
+		free(line);
+	}
+	// line = get_next_line(fd);
+	free(line);
+	close(fd); // Cerrar el archivo
+	return (0);
+}   
