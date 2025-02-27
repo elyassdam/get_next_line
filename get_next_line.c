@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: yael-you <yael-you@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 17:04:24 by yael-you          #+#    #+#             */
-/*   Updated: 2025/02/27 15:27:47 by yael-you         ###   ########.fr       */
+/*   Updated: 2025/02/27 18:40:33 by yael-you         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 
 #include <unistd.h>
@@ -16,7 +16,6 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include "get_next_line.h"
-#include <string.h>
 
 /* char	*ft_strchr(const char *s, int c)
 {
@@ -127,40 +126,58 @@ char	*ft_strdup(const char *s)
 } */
 char	*extractor(char *breader);
 char	*get_next_line(int fd);
-void	ft_free(char *temp, char *btemp);
+void	ft_free(char **breader, char **temp);
 char	*extractor_restante(char *breader);
-
-
-char	*get_next_line(int fd)
+ 
+void	ft_free(char **breader, char **temp)
 {
-	static char	*breader;
-	ssize_t		read_bytes;
-	char		*line;
-	char		temp[BUFFER_SIZE + 1];
-	char 		*bcopy;
-
-	 if (!breader)
-		breader = ft_strdup(""); 
-	if (breader == NULL || fd < 0)
-		return NULL;
-	read_bytes = 1;
-	while (!ft_strchr(breader,'\n') && read_bytes > 0 )
+	if (*breader)
 	{
-		read_bytes = read(fd, temp, BUFFER_SIZE);
-		if (read_bytes < 0)
-			return (NULL);
-		temp[read_bytes] = '\0';
-		bcopy = ft_strjoin(breader,temp);
-		free(breader);
-		breader = bcopy;
+		free (*breader);
+		*breader = NULL;
 	}
-	line = extractor(breader);
-	bcopy = extractor_restante(breader);
-	free(breader);
-	breader = bcopy;
-	return (line);
+	if (*temp)
+	{
+		free(*temp);
+		*temp = NULL;
+	}
 }
 
+char *get_next_line(int fd) {
+    static char *breader;
+    ssize_t read_bytes;
+    char *line;
+    char *temp;
+    char *bcopy;
+
+	if (fd < 0)
+		return NULL;
+    if (!breader)
+        breader = ft_strdup("");
+    read_bytes = 1;
+    while (!ft_strchr(breader, '\n') && read_bytes > 0) {
+        temp = (char *)malloc(BUFFER_SIZE + 1);
+        if (!temp) 
+            return (free(temp),NULL);
+        read_bytes = read(fd, temp, BUFFER_SIZE);
+        if (read_bytes < 0)
+            return (ft_free(&breader,&temp), NULL);
+        temp[read_bytes] = '\0';
+        bcopy = ft_strjoin(breader, temp);
+        ft_free(&breader,&temp);
+        if (!bcopy) {
+            breader = NULL;
+            return NULL;
+        }
+        breader = bcopy;
+    }
+
+    line = extractor(breader);
+    bcopy = extractor_restante(breader);
+    free(breader);
+    breader = bcopy;
+    return (line);
+}
 char	*extractor(char *breader)
 {
 	char	*ptr;
@@ -196,10 +213,10 @@ char	*extractor_restante(char *breader)
 	return (resto);
 }
 
-
-int main(void)
+/*  int main(void)
 {
-	int fd = open("test.txt", O_RDONLY);
+	int fd =  open("empty.txt", O_RDONLY);
+	
 	char *line;
 	// free(get_next_line(fd));
 	while ((line = get_next_line(fd)) != NULL)
@@ -210,6 +227,7 @@ int main(void)
 	}
 	// line = get_next_line(fd);
 	free(line);
+	
 	close(fd); // Cerrar el archivo
 	return (0);
-}   
+}    */
