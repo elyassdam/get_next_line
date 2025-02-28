@@ -6,15 +6,10 @@
 /*   By: yael-you <yael-you@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 17:04:24 by yael-you          #+#    #+#             */
-/*   Updated: 2025/02/27 18:40:33 by yael-you         ###   ########.fr       */
+/*   Updated: 2025/02/27 18:53:14 by yael-you         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
-
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <stdlib.h>
 #include "get_next_line.h"
 
 /* char	*ft_strchr(const char *s, int c)
