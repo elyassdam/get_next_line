@@ -1,19 +1,19 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yael-you <yael-you@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/19 17:04:24 by yael-you          #+#    #+#             */
-/*   Updated: 2025/02/28 11:53:41 by yael-you         ###   ########.fr       */
+/*   Created: 2025/03/03 12:31:55 by yael-you          #+#    #+#             */
+/*   Updated: 2025/03/03 12:36:33 by yael-you         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
 char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char const *s1, char const *s2);
@@ -25,7 +25,7 @@ char	*ft_strdup(const char *s);
 char	*ft_strchr(const char *s, int c)
 {
 	if (!s)
-		return NULL;
+		return (NULL);
 	while (*s)
 	{
 		if (*s == (unsigned char)c)
@@ -39,8 +39,9 @@ char	*ft_strchr(const char *s, int c)
 
 char	*ft_strncpy(char *dest, char *src, unsigned int n)
 {
-	unsigned int	i = 0;
+	unsigned int	i;
 
+	i = 0;
 	while (src[i] != '\0' && i < n)
 	{
 		dest[i] = src[i];
@@ -54,9 +55,11 @@ char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*s3;
 	char	*s3_start;
-	size_t	len1 = ft_strlen(s1);
-	size_t	len2 = ft_strlen(s2);
+	size_t	len1;
+	size_t	len2;
 
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
 	s3 = (char *)malloc(len1 + len2 + 1);
 	if (!s3)
 		return (NULL);
@@ -68,12 +71,14 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	*s3 = '\0';
 	return (s3_start);
 }
+
 size_t	ft_strlen(const char *s)
 {
-	size_t	size = 0;
+	size_t	size ;
 
-	if(s == NULL)
-		return 0;
+	size = 0;
+	if (s == NULL)
+		return (0);
 	while (s[size])
 		size++;
 	return (size);

@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
@@ -6,16 +6,16 @@
 /*   By: yael-you <yael-you@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 17:04:24 by yael-you          #+#    #+#             */
-/*   Updated: 2025/02/28 13:41:21 by yael-you         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:34:25 by yael-you         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "get_next_line.h"
 
 static char	*extractor(char *breader);
 char		*get_next_line(int fd);
 static void	ft_free(char **breader, char **temp);
-static char	*extractor_restante(char *breader);
+static char	*extractor_left(char *breader);
 
 void	ft_free(char **breader, char **temp)
 {
@@ -30,6 +30,7 @@ void	ft_free(char **breader, char **temp)
 		*temp = NULL;
 	}
 }
+
 static char	*readline(int fd, char **breader, char **bcopy)
 {
 	ssize_t	read_bytes;
@@ -61,20 +62,16 @@ char	*get_next_line(int fd)
 	char		*bcopy;
 
 	if (fd < 0)
-	{
 		return (NULL);
-	}
 	if (!breader)
 	{
 		breader = ft_strdup("");
 		if (!breader)
-		{
 			return (NULL);
-		}
 	}
 	breader = readline(fd, &breader, &bcopy);
 	line = extractor(breader);
-	bcopy = extractor_restante(breader);
+	bcopy = extractor_left(breader);
 	return (free(breader), breader = bcopy, line);
 }
 
@@ -95,7 +92,7 @@ char	*extractor(char *breader)
 	return (line);
 }
 
-char	*extractor_restante(char *breader)
+char	*extractor_left(char *breader)
 {
 	char	*ptr;
 	char	*resto;
@@ -112,22 +109,3 @@ char	*extractor_restante(char *breader)
 	resto = ft_strdup(ptr);
 	return (resto);
 }
-/*
-int	main(void)
-{
-	int fd = open("get_next_line_bonus.h", O_RDONLY);
-
-	char *line;
-	// free(get_next_line(fd));
-	while ((line = get_next_line(fd)) != NULL)
-	{
-		// printf("No deberia\n");
-		printf("%s", line);
-		free(line);
-	}
-	// line = get_next_line(fd);
-	free(line);
-
-	close(fd); // Cerrar el archivo
-	return (0);
-} */

@@ -1,16 +1,18 @@
-#include "get_next_line.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yael-you <yael-you@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/03 12:25:55 by yael-you          #+#    #+#             */
+/*   Updated: 2025/03/03 14:34:19 by yael-you         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line_bonus.h"
-#include <stdlib.h>
-#include <unistd.h>
 
-char	*ft_strchr(const char *s, int c);
-char	*ft_strdup(const char *s);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*extractor(char *breader);
-char	*extractor_restante(char *breader);
-void	ft_free(char **breader, char **temp);
-
-void	ft_free(char **breader, char **temp)
+static void	ft_free(char **breader, char **temp)
 {
 	if (*breader)
 	{
@@ -24,7 +26,7 @@ void	ft_free(char **breader, char **temp)
 	}
 }
 
-char	*extractor(char *breader)
+static char	*extractor(char *breader)
 {
 	char	*ptr;
 	char	*line;
@@ -41,7 +43,7 @@ char	*extractor(char *breader)
 	return (line);
 }
 
-char	*extractor_restante(char *breader)
+static char	*extractor_left(char *breader)
 {
 	char	*ptr;
 	char	*resto;
@@ -59,83 +61,47 @@ char	*extractor_restante(char *breader)
 	return (resto);
 }
 
-char	*get_next_line(int fd)
+static char	*readline(int fd, char **breaders, char **bcopy)
 {
-	static char *breaders[MAX_FD];
 	ssize_t	read_bytes;
-	char	*line;
 	char	*temp;
-	char	*bcopy;
 
-	if (fd < 0 || fd >= MAX_FD)
-		return (NULL);
-	if (!breaders[fd])
-		breaders[fd] = ft_strdup("");
 	read_bytes = 1;
-	while (!ft_strchr(breaders[fd], '\n') && read_bytes > 0)
+	while (!ft_strchr(*breaders, '\n') && read_bytes > 0)
 	{
 		temp = (char *)malloc(BUFFER_SIZE + 1);
 		if (!temp)
 			return (free(temp), NULL);
 		read_bytes = read(fd, temp, BUFFER_SIZE);
 		if (read_bytes < 0)
-			return (ft_free(&breaders[fd], &temp), NULL);
+			return (ft_free(breaders, &temp), NULL);
 		temp[read_bytes] = '\0';
-		bcopy = ft_strjoin(breaders[fd], temp);
-		ft_free(&breaders[fd], &temp);
-		if (!bcopy)
+		*bcopy = ft_strjoin(*breaders, temp);
+		ft_free(breaders, &temp);
+		if (!*bcopy)
 		{
-			breaders[fd] = NULL;
+			*breaders = NULL;
 			return (NULL);
 		}
-		breaders[fd] = bcopy;
+		*breaders = *bcopy;
 	}
+	return (*breaders);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*breaders[MAX_FD];
+	char		*line;
+	char		*bcopy;
+
+	if (fd < 0 || fd >= MAX_FD)
+		return (NULL);
+	if (!breaders[fd])
+		breaders[fd] = ft_strdup("");
+	breaders[fd] = readline(fd, &breaders[fd], &bcopy);
 	line = extractor(breaders[fd]);
-	bcopy = extractor_restante(breaders[fd]);
+	bcopy = extractor_left(breaders[fd]);
 	free(breaders[fd]);
 	breaders[fd] = bcopy;
 	return (line);
 }
-/* int main() {
-	int fd1, fd2, fd3, fd4;
-	char *line;
-
-	// Abrir archivos de prueba (asegúrate de que existan)
-	fd1 = open("file1.txt", O_RDONLY);
-	fd2 = open("file2.txt", O_RDONLY);
-	fd3 = open("file3.txt", O_RDONLY);
-	fd4 = open("file4.txt", O_RDONLY);
-
-	if (fd1 < 0 || fd2 < 0 || fd3 < 0 || fd4 < 0) {
-		perror("Error opening files");
-		return (1);
-	}
-
-	// Leer líneas de los archivos
-	while ((line = get_next_line_bonus(fd1)) != NULL) {
-		printf("fd1: %s", line);
-		free(line);
-	}
-
-	while ((line = get_next_line_bonus(fd2)) != NULL) {
-		printf("fd2: %s", line);
-		free(line);
-	}
-
-	while ((line = get_next_line_bonus(fd3)) != NULL) {
-		printf("fd3: %s", line);
-		free(line);
-	}
-	while ((line = get_next_line_bonus(fd4)) != NULL) {
-		printf("fd4: %s", line);
-		free(line);
-	}
-
-	// Cerrar archivos
-	close(fd1);
-	close(fd2);
-	close(fd3);
-	close(fd4);
-
-	return (0);
-} */
